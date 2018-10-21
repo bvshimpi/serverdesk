@@ -1,1 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+@import './assets/styles/spinner';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import './assets/styles/variable';
+
+%row-shared {
+    padding: $rowPadding;
+    margin: $rowMargin;
+}
+
+.pageRow.row{
+    @extend %row-shared;
+    background: #fff;
+}
+
+.pageContainer.row {
+    @extend %row-shared;
+    height: $rowHeight;
+}
+
+.jumbotron {
+    height: $rowHeight;
+}
+
+body{
+    background-image:url('./assets/images/back.jpg');
+    background-repeat: repeat;
+}
+.cardHeader{
+    background-color: $cardHeaderColor;
+}
+.cardTitle {
+    color: $titleColor;
+    padding: $rowPadding;
+}
+.vAlignOuter {
+    display: flex;
+}
+.vAlignInner {
+    align-self: center;
+    margin: 0 auto;
+    min-width: 30rem;
+}
+.full-width {
+    width:100%;
+}
+p.customError {
+    color:#f44336 !important;
+    font-size: 0.8em;
+    margin-top: -1rem;
+    text-align:left;
+}
+
+#gridContainer{
+    tr {
+        td {
+            font-size: 1.2em;
+            padding: 0.7rem;
+        }
+    }
+}
+

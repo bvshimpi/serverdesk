@@ -1,0 +1,32 @@
+<div class="row pageContainer">
+    <div class="col-md-12">
+        <div class="jumbotron pt-3">
+            <h2 class="h2 h2-responsive text-info">My Posted Tickets</h2>
+            <p class="text-right"><a mat-raised-button color="primary" routerLink="/serverdesk/manageticket">Post Ticket</a></p>
+            <dx-data-grid id="gridContainer" [dataSource]="customers" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true">
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+                <dxi-column caption="Company Name" dataField="CompanyName"></dxi-column>
+                <dxi-column caption="City" dataField="City"></dxi-column>
+                <dxi-column caption="State" dataField="State"></dxi-column>
+                <dxi-column caption="Phone" [width]="140" dataField="Phone"></dxi-column>
+                <dxi-column caption="Fax" dataField="Fax"></dxi-column>
+                <dxi-column dataField="Action" [allowFiltering]="false" [allowSorting]="false" cellTemplate="cellTemplate" [width]="190"></dxi-column>
+                <div *dxTemplate="let data of 'cellTemplate'">
+                    <a  title="Click to View Contract" (click)="ViewContractDetails(data)">
+                        <i class="icon-eye icons"></i>
+                    </a> 
+                </div>
+
+                <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [paging]="true" [grouping]="true">
+                </dxo-remote-operations> -->
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"></dxo-pager>
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+

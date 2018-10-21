@@ -1,0 +1,56 @@
+<div class="row pageContainer align-middle">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 vAlignOuter">
+      <!--Card-->
+      <mdb-card cascade="true" class="vAlignInner">
+    
+        <!--Card image-->
+        <div class="view view-cascade gradient-card-header cardHeader">
+          <h2 class="card-header-title cardTitle text-center"><i class="fa fa-lock"></i> Login</h2>
+        </div>
+        <!--/Card image-->
+    
+        <mdb-card-body cascade="true" class="text-center">
+          <!--Card content-->
+          <mdb-card-text>
+            <form #LoginFormRef="ngForm" novalidate>
+              <mat-form-field class="full-width">
+                <input required #EmailRef="ngModel" autocomplete="off" id="email" name="email" [(ngModel)]="email" type="email" matInput placeholder="Your Email" pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'>
+                <mat-error *ngIf="EmailRef.invalid && (EmailRef.dirty || EmailRef.touched)">
+                  <span *ngIf="EmailRef.errors.required" color="warn">
+                    Please fill out this field
+                  </span>
+                  <span *ngIf="EmailRef.errors.pattern" color="warn">
+                    Please enter valid email address
+                  </span>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input required #PasswordRef="ngModel" matInput id="password" minlength="6" name="password" [(ngModel)]="password" type="password" placeholder="Your Password">
+                <mat-error *ngIf="PasswordRef.invalid && (PasswordRef.dirty || PasswordRef.touched)">
+                  <span *ngIf="PasswordRef.errors.required">
+                    Please fill out this field
+                  </span>
+                  <span *ngIf="PasswordRef.errors.minlength">
+                    Password length should be minimum 6 characters
+                  </span>
+                </mat-error>
+              </mat-form-field>
+              <p>
+                <button type="submit" mat-raised-button color="primary">Login</button>
+              </p>
+              <p>
+                <a routerLink="/serverdesk/register" mat-button>Register Now</a> &nbsp;
+                <a routerLink="/serverdesk/forgot" mat-button>Forgot Password ?</a>
+              </p>
+            </form>
+          </mdb-card-text>
+    
+        </mdb-card-body>
+        <!--/.Card content-->
+    
+      </mdb-card>
+      <!--/.Card-->
+  </div>
+  <div class="col-md-3"></div>
+</div>
