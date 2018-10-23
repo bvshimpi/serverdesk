@@ -11,7 +11,7 @@ var emailHandler = require("../../utils/emailHandler");
 exports.getTicketTypes = function(req, res) {
     var result = res.locals.result;
     if(result) {
-        var qry = "SELECT * FROM ticket_type where is_active='1'";
+        var qry = "SELECT * FROM ticket_types where is_active='1'";
         db.query(qry, function(errQuery, resQuery) {
             if(errQuery)
                 res.send(responseGenerator.getResponse(500, "Failed to process your ticket", []));
@@ -31,15 +31,22 @@ exports.addUpdateTicket = function(req, res) {
         var uid = result.id;
         var title = typeof req.body.title != "undefined" ? req.body.title : "";
         var description = typeof req.body.description != "undefined" ? req.body.description : "";
-        var ticket_type = typeof req.body.ticket_type != "undefined" ? req.body.ticket_type : null;
-        var priority = typeof req.body.priority != "undefined" ? req.body.priority : null;
-        var status = typeof req.body.status != "undefined" ? req.body.status : null;
-        var email = typeof req.body.email != "undefined" ? req.body.email : null;
-        var phone = typeof req.body.phone != "undefined" ? req.body.phone : null;
-
+        var ticket_type = typeof req.body.ticket_type != "undefined" ? req.body.ticket_type : "";
+        var priority = typeof req.body.priority != "undefined" ? req.body.priority : "";
+        var status = typeof req.body.status != "undefined" ? req.body.status : "";
+        var email = typeof req.body.email != "undefined" ? req.body.email : "";
+        var phone = typeof req.body.phone != "undefined" ? req.body.phone : "";
+        var ticket_id = typeof req.body.ticket_id != "undefined" ? req.body.ticket_id : null;
+        
         if(phone != "" && email != "" && status != "" && priority != "" && ticket_type != "" && title != "" && description != "") {
-            var values = [id,uid,title,description,ticket_type,priority,status,email,phone];
-            db.query("call add_update_ticket()", values, function(errQuery, resQuery) {
+            var screenshot = "";
+            if(ticket_id == null || id == null) {
+                var random_no = Math.floor(Math.random() * 90 + 10);
+                ticket_id = "T"+random_no+Date.now();
+            }
+            
+            var values = [id,uid,title,description,ticket_type,priority,status,email,phone,screenshot,ticket_id];
+            db.query("CALL add_update_ticket(?,?,?,?,?,?,?,?,?,?,?);", values, function(errQuery, resQuery) {
                 if(errQuery)
                     res.send(responseGenerator.getResponse(500, "Failed to process ticket", []));
                 else 
@@ -58,7 +65,7 @@ exports.getTickets = function(req, res) {
     var result = res.locals.result;
     if(result) {
         var uid = result.id;
-        var qry = "SELECT id, ticket_id,title,status,priority,tt.name FROM ticket t INNER JOIN ticket_type tt ON t.ticket_type = tt.id WHERE t.user_id = ?";
+        var qry = "SELECT id, ticket_id,title,status,priority,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ?";
         db.query(qry, result.id, function(errQuery, resQuery) {
             if(errQuery)
                 res.send(responseGenerator.getResponse(500, "Failed to get tickets", []));
