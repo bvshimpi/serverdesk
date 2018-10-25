@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
   }
 
   test(){
-    this.mainServiceObj.showToastr("success", "Bhavesh Shimpi");
+    this.mainServiceObj.postRequest("login", null).subscribe(Response => {
+      alert(Response);
+    });
   } 
 }

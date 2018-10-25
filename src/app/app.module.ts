@@ -1,4 +1,5 @@
 import { BrowserModule, } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
@@ -45,7 +46,8 @@ import { ToastrModule } from 'ngx-toastr';
     DxDataGridModule,
     DxDropDownBoxModule,
     DxTreeViewModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
