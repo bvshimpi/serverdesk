@@ -60,7 +60,6 @@ exports.addUpdateTicket = function(req, res) {
         res.send(responseGenerator.getResponse(500, "Failed to process your ticket", []))
     }
 }
-
 exports.getTickets = function(req, res) {
     var result = res.locals.result;
     if(result) {
@@ -68,12 +67,44 @@ exports.getTickets = function(req, res) {
         var qry = "SELECT id, ticket_id,title,status,priority,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ?";
         db.query(qry, result.id, function(errQuery, resQuery) {
             if(errQuery)
-                res.send(responseGenerator.getResponse(500, "Failed to get tickets", []));
-            else 
-                res.send(responseGenerator.getResponse(200, "Tickets found.", resQuery));
+                res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []));
+            else {
+                if(resQuery.length > 0)
+                    res.send(responseGenerator.getResponse(200, "Ticket found.", resQuery));
+                else
+                    res.send(responseGenerator.getResponse(500, "Ticket not found.", resQuery));
+            }
         });
     }
     else {
-        res.send(responseGenerator.getResponse(500, "Failed to get tickets", []))
+        res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []))
+    }
+}
+
+exports.getTicket = function(req, res) {
+    var result = res.locals.result;
+    if(result) {
+        var uid = result.id;
+        var id = req.body.id;
+        if(id != null) {
+            var qry = "SELECT t.*,tc.email,tc.phone FROM ticket t INNER JOIN ticket_contact tc ON t.ticket_id = tc.tid WHERE t.id = ? AND t.user_id = ?";
+            var values = [id, uid];
+            db.query(qry, values, function(errQuery, resQuery) {
+                if(errQuery)
+                    res.send(responseGenerator.getResponse(500, "Failed to get tickets", []));
+                else {
+                    if(resQuery.length > 0)
+                        res.send(responseGenerator.getResponse(200, "Ticket found.", resQuery));
+                    else
+                        res.send(responseGenerator.getResponse(500, "Ticket not found.", resQuery));
+                }
+            });
+        }
+        else {
+            res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []))
+        }
+    }
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to get ticket", []))
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MainService} from './../../service/main.service';
 
 @Component({
   selector: 'app-login',
@@ -10,9 +11,13 @@ export class LoginComponent implements OnInit {
   email: any;
   password: any;
 
-  constructor() { }
+  constructor(private mainServiceObj: MainService) { }
 
   ngOnInit() {
+    this.mainServiceObj.showToastr("success", "Bhavesh Shimpi");
   }
 
+  test(){
+    this.mainServiceObj.showToastr("success", "Bhavesh Shimpi");
+  } 
 }

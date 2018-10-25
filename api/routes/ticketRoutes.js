@@ -6,5 +6,5 @@ var router = new express.Router();
 router.post("/getTicketTypes", common.verifyRequest, ticket.getTicketTypes);
 router.post("/addUpdateTicket", common.verifyRequest, ticket.addUpdateTicket);
 router.post("/getTickets", common.verifyRequest, ticket.getTickets);
-
+router.post("/getTicket", common.verifyRequest, ticket.getTicket);
 module.exports = router;

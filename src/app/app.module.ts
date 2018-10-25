@@ -18,6 +18,7 @@ import { TicketsComponent } from './layout/myticket/tickets/tickets.component';
 import { AddupdateticketComponent } from './layout/myticket/addupdateticket/addupdateticket.component';
 import { RticketsComponent } from './layout/resolveticket/rtickets/rtickets.component';
 import { DxDataGridModule,DxDropDownBoxModule,DxTreeViewModule } from 'devextreme-angular';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { DxDataGridModule,DxDropDownBoxModule,DxTreeViewModule } from 'devextrem
     FormsModule,
     DxDataGridModule,
     DxDropDownBoxModule,
-    DxTreeViewModule
+    DxTreeViewModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
