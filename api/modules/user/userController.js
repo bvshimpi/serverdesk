@@ -52,6 +52,7 @@ exports.login = function(req, res) {
         });
     }
     else {
+        res.status(200);
         res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []));
     }
 }

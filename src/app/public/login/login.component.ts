@@ -14,12 +14,21 @@ export class LoginComponent implements OnInit {
   constructor(private mainServiceObj: MainService) { }
 
   ngOnInit() {
-    this.mainServiceObj.showToastr("success", "Bhavesh Shimpi");
+    
   }
 
   test(){
     this.mainServiceObj.postRequest("login", null).subscribe(Response => {
-      alert(Response);
+      console.log("Response",Response);
+      if(Response.Status == "200") {
+        this.mainServiceObj.ShowAlert('success', Response.Message);
+      }
+      else {
+        console.log(Response.Message);
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+      }
+    }, error => {
+      this.mainServiceObj.HandleErrorMessages(error);
     });
   } 
 }
