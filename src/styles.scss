@@ -16,6 +16,7 @@
 .pageRow.row{
     @extend %row-shared;
     background: #fff;
+    font-weight:400;
 }
 
 .pageContainer.row {
@@ -24,7 +25,7 @@
 }
 
 .jumbotron {
-    height: $rowHeight;
+    min-height: $rowHeight;
 }
 
 body{
@@ -70,3 +71,24 @@ p.customError {
     font-size:1em;
 }
 
+.mat-form-field-infix {
+    margin-left:0.5rem;
+    font-size:1.1em;
+}
+
+.toast-container .toast {
+    border-radius: 5px;
+    width:400px;
+}
+
+.toast-container .toast .toast-message {
+    padding-top:0.3rem;
+}
+
+.black-overlay {
+    position: fixed !important;
+}
+
+.dx-header-row td{
+    font-weight:bold;
+}

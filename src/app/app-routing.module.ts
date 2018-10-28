@@ -9,6 +9,8 @@ import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { TicketsComponent } from './layout/myticket/tickets/tickets.component';
 import { AddupdateticketComponent } from './layout/myticket/addupdateticket/addupdateticket.component';
 import { RticketsComponent } from './layout/resolveticket/rtickets/rtickets.component';
+import { ApplicationGuard } from './application.guard';
+import {ActivateUserComponent} from './public/activate-user/activate-user.component';
 
 const routes: Routes = [
     {
@@ -29,16 +31,22 @@ const routes: Routes = [
                 path:"forgot", component: ForgotpasswordComponent
             },
             {
-                path:"dashboard", component: DashboardComponent
+                path: "activateUser/:token", component: ActivateUserComponent
             },
             {
-                path:"myTickets", component: TicketsComponent
+                path:"dashboard", component: DashboardComponent, canActivate: [ApplicationGuard]
             },
             {
-                path:"manageticket", component: AddupdateticketComponent
+                path:"myTickets", component: TicketsComponent, canActivate: [ApplicationGuard]
             },
             {
-                path:"resolveTicket", component: RticketsComponent
+                path:"manageticket", component: AddupdateticketComponent, canActivate: [ApplicationGuard]
+            },
+            {
+                path:"manageticket/:id/:tid", component: AddupdateticketComponent, canActivate: [ApplicationGuard]
+            },
+            {
+                path:"resolveTicket", component: RticketsComponent, canActivate: [ApplicationGuard]
             },
         ]
     },

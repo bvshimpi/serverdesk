@@ -1,0 +1,32 @@
+<div class="row pageContainer align-middle">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 vAlignOuter">
+      <!--Card-->
+      <mdb-card cascade="true" class="vAlignInner">
+    
+        <!--Card image-->
+        <div class="view view-cascade gradient-card-header cardHeader p-2">
+          <h2 class="card-header-title cardTitle text-center"><i class="fa fa-lock"></i> Activate User Account</h2>
+        </div>
+        <!--/Card image-->
+    
+        <mdb-card-body cascade="true" class="text-center">
+          <!--Card content-->
+          <mdb-card-text>
+              <p>
+                <button (click)="resendEmail()" type="submit" mat-raised-button color="primary">Resend Activation Email</button>
+              </p>
+              <p>
+                <a routerLink="/serverdesk/register" mat-button>Register Now</a> &nbsp;
+                <a routerLink="/serverdesk/login" mat-button>Login Now</a>
+              </p>
+          </mdb-card-text>
+    
+        </mdb-card-body>
+        <!--/.Card content-->
+    
+      </mdb-card>
+      <!--/.Card-->
+  </div>
+  <div class="col-md-3"></div>
+</div>

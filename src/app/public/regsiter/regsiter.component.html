@@ -5,7 +5,7 @@
       <mdb-card cascade="true" class="vAlignInner">
     
         <!--Card image-->
-        <div class="view view-cascade gradient-card-header cardHeader">
+        <div class="view view-cascade gradient-card-header cardHeader pt-2">
           <h2 class="card-header-title cardTitle text-center"><i class="fa fa-user"></i> Register</h2>
         </div>
         <!--/Card image-->
@@ -14,7 +14,8 @@
           <!--Card content-->
           <mdb-card-text>
             <form #RegisterFormRef="ngForm" novalidate>
-              <mat-form-field class="full-width">
+              <mat-form-field class="full-width p-1">
+                <mat-icon matPrefix>face</mat-icon>
                 <input required #NameRef="ngModel" autocomplete="off" id="name" name="name" [(ngModel)]="name" type="text" matInput placeholder="Your Name">
                 <mat-error *ngIf="NameRef.invalid && (NameRef.dirty || NameRef.touched)">
                   <span *ngIf="NameRef.errors.required" color="warn">
@@ -22,7 +23,8 @@
                   </span>
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="full-width">
+              <mat-form-field class="full-width p-1">
+                <mat-icon matPrefix>account_circle</mat-icon>
                 <input required #EmailRef="ngModel" autocomplete="off" id="email" name="email" [(ngModel)]="email" type="email" matInput placeholder="Your Email" pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'>
                 <mat-error *ngIf="EmailRef.invalid && (EmailRef.dirty || EmailRef.touched)">
                   <span *ngIf="EmailRef.errors.required" color="warn">
@@ -34,7 +36,8 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="full-width">
+              <mat-form-field class="full-width p-1">
+                <mat-icon matPrefix>visibility</mat-icon>
                 <input required #PasswordRef="ngModel" matInput id="password" minlength="6" name="password" [(ngModel)]="password" type="password" placeholder="Your Password">
                 <mat-error *ngIf="PasswordRef.invalid && (PasswordRef.dirty || PasswordRef.touched)">
                   <span *ngIf="PasswordRef.errors.required">
@@ -45,7 +48,8 @@
                   </span>
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="full-width">
+              <mat-form-field class="full-width p-1">
+                  <mat-icon matPrefix>visibility</mat-icon>
                   <input required #CfPasswordRef="ngModel" matInput id="cfpassword" (keyup)="matchPassword($event.target.value)" name="cfpassword" [(ngModel)]="cfpassword" type="password" placeholder="Confirm Password">
                   <mat-error *ngIf="CfPasswordRef.invalid && (CfPasswordRef.dirty || CfPasswordRef.touched)">
                       <span *ngIf="CfPasswordRef.errors.required">
@@ -59,7 +63,7 @@
                   </span>
               </p>
               <p>
-                <button type="submit" mat-raised-button color="primary">Register</button>
+                <button type="submit" mat-raised-button color="primary" (click)="register(RegisterFormRef)">Register</button>
               </p>
               <p>
                 <a routerLink="/serverdesk/login" mat-button>Login Now</a> &nbsp;

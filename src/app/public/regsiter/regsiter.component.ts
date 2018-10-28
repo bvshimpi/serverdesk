@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MainService} from './../../service/main.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-regsiter',
@@ -13,7 +15,7 @@ export class RegsiterComponent implements OnInit {
   cfpassword: any;
   terms: boolean = false;
   PasswordMatchStatus: boolean = true;
-  constructor() { }
+  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
   }
@@ -40,5 +42,31 @@ export class RegsiterComponent implements OnInit {
       }
     }
     console.log("test",this.PasswordMatchStatus);
+  }
+
+  register(RegisterFormRef) {
+    if(RegisterFormRef.valid) {
+      this.spinner.show();
+      var requestBody = {
+        "name": this.name,
+        "email": this.email,
+        "password": this.password,
+        "cpassword": this.cfpassword
+      };
+
+      this.mainServiceObj.postRequest("signup", requestBody).subscribe(Response => {
+        if(Response.Status == "200") {
+            this.mainServiceObj.ShowAlert('success', Response.Message);
+            this.mainServiceObj.navigateToComponent('/serverdesk/login');
+        }
+        else {
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+        }
+        this.spinner.hide();
+      }, error => {
+        this.mainServiceObj.HandleErrorMessages(error);
+        this.spinner.hide();
+      });
+    }
   }
 }

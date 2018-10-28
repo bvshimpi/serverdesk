@@ -20,6 +20,9 @@ import { AddupdateticketComponent } from './layout/myticket/addupdateticket/addu
 import { RticketsComponent } from './layout/resolveticket/rtickets/rtickets.component';
 import { DxDataGridModule,DxDropDownBoxModule,DxTreeViewModule } from 'devextreme-angular';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ApplicationGuard } from './application.guard';
+import { ActivateUserComponent } from './public/activate-user/activate-user.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { ToastrModule } from 'ngx-toastr';
     DashboardComponent,
     TicketsComponent,
     AddupdateticketComponent,
-    RticketsComponent
+    RticketsComponent,
+    ActivateUserComponent
   ],
   imports: [
     BrowserModule,
@@ -47,9 +51,10 @@ import { ToastrModule } from 'ngx-toastr';
     DxDropDownBoxModule,
     DxTreeViewModule,
     ToastrModule.forRoot(),
-    HttpModule
+    HttpModule,
+    NgxSpinnerModule
   ],
-  providers: [],
+  providers: [ApplicationGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

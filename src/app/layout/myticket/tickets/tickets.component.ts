@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MainService} from './../../../service/main.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-tickets',
@@ -7,53 +9,67 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TicketsComponent implements OnInit {
 
-  customers:any = [{
-    "ID": 1,
-    "CompanyName": "Super Mart of the West",
-    "Address": "702 SW 8th Street",
-    "City": "Bentonville",
-    "State": "Arkansas",
-    "Zipcode": 72716,
-    "Phone": "(800) 555-2797",
-    "Fax": "(800) 555-2171",
-    "Website": "http://www.nowebsitesupermart.com"
-}, {
-    "ID": 2,
-    "CompanyName": "Electronics Depot",
-    "Address": "2455 Paces Ferry Road NW",
-    "City": "Atlanta",
-    "State": "Georgia",
-    "Zipcode": 30339,
-    "Phone": "(800) 595-3232",
-    "Fax": "(800) 595-3231",
-    "Website": "http://www.nowebsitedepot.com"
-},
-{
-  "ID": 2,
-  "CompanyName": "Electronics Depot",
-  "Address": "2455 Paces Ferry Road NW",
-  "City": "Atlanta",
-  "State": "Georgia",
-  "Zipcode": 30339,
-  "Phone": "(800) 595-3232",
-  "Fax": "(800) 595-3231",
-  "Website": "http://www.nowebsitedepot.com"
-},
-{
-  "ID": 2,
-  "CompanyName": "Electronics Depot",
-  "Address": "2455 Paces Ferry Road NW",
-  "City": "Atlanta",
-  "State": "Georgia",
-  "Zipcode": 30339,
-  "Phone": "(800) 595-3232",
-  "Fax": "(800) 595-3231",
-  "Website": "http://www.nowebsitedepot.com"
-}];
+  tickets:any = [];
 
-  constructor() { }
+  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
+    this.getTickets();
   }
 
+  getTickets() {
+    this.spinner.show();
+    this.mainServiceObj.postRequest("getTickets").subscribe(Response => {
+      if(Response.Status == "200") {
+        if(typeof Response.Data != "undefined") {
+          this.tickets = Response.Data;
+        }
+        else {
+          this.mainServiceObj.ShowAlert('error', "Failed to get tickets.");
+        }
+      }
+      else {
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+      }
+      this.spinner.hide();
+    }, error => {
+      this.mainServiceObj.HandleErrorMessages(error);
+      this.spinner.hide();
+    });
+  }
+
+  updateTicket(data) {
+    var id = btoa(data.id);
+    var tid = btoa(data.ticket_id);
+    this.mainServiceObj.navigateToComponent("/serverdesk/manageticket/"+id+"/"+tid);
+  }
+
+  deleteTicket(data) {
+    var requestBody = {
+      "id": data.id,
+      "ticket_id": data.ticket_id
+    }
+    this.spinner.show();
+    this.mainServiceObj.postRequest("deleteTicket", requestBody).subscribe(Response => {
+      if(Response.Status == "200") {
+        if(typeof Response.Data != "undefined") {
+          this.tickets = Response.Data;
+        }
+        else {
+          this.mainServiceObj.ShowAlert('error', "Failed to get tickets.");
+        }
+      }
+      else {
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+      }
+      this.spinner.hide();
+    }, error => {
+      this.mainServiceObj.HandleErrorMessages(error);
+      this.spinner.hide();
+    });
+  }
+
+  updateStatus(data) {
+    console.log(data);
+  }
 }

@@ -3,21 +3,29 @@
         <div class="jumbotron pt-3">
             <h2 class="h2 h2-responsive text-info">My Posted Tickets</h2>
             <p class="text-right"><a mat-raised-button color="primary" routerLink="/serverdesk/manageticket">Post Ticket</a></p>
-            <dx-data-grid id="gridContainer" [dataSource]="customers" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true">
+            <dx-data-grid id="gridContainer" [dataSource]="tickets" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true">
                 <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
                 <dxo-load-panel [enabled]="true"></dxo-load-panel>
                 <dxo-sorting mode="multiple"></dxo-sorting>
                 <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
 
-                <dxi-column caption="Company Name" dataField="CompanyName"></dxi-column>
-                <dxi-column caption="City" dataField="City"></dxi-column>
-                <dxi-column caption="State" dataField="State"></dxi-column>
-                <dxi-column caption="Phone" [width]="140" dataField="Phone"></dxi-column>
-                <dxi-column caption="Fax" dataField="Fax"></dxi-column>
+                <dxi-column caption="Ticket Id" dataField="ticket_id"></dxi-column>
+                <dxi-column caption="Ticket Type" dataField="name"></dxi-column>
+                <dxi-column caption="Title" dataField="title"></dxi-column>
+                <dxi-column caption="Status" dataField="status"></dxi-column>
+                <dxi-column caption="Priority" dataField="priority"></dxi-column>
                 <dxi-column dataField="Action" [allowFiltering]="false" [allowSorting]="false" cellTemplate="cellTemplate" [width]="190"></dxi-column>
-                <div *dxTemplate="let data of 'cellTemplate'">
-                    <a  title="Click to View Contract" (click)="ViewContractDetails(data)">
-                        <i class="icon-eye icons"></i>
+                <div *dxTemplate="let ticket of 'cellTemplate'">
+                    <a title="Click to Update Ticket" (click)="updateTicket(ticket.data)">
+                        <i class="fa fa-pencil-square-o fa-1x" aria-hidden="true"></i>
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a title="Click to Delete Ticket" (click)="deleteTicket(ticket.data)">
+                        <i class="fa fa-trash fa-1x" aria-hidden="true"></i>
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a title="Click to Update Status" (click)="updateStatus(ticket.data)">
+                        <i class="fa fa-flag fa-1x" aria-hidden="true"></i>
                     </a> 
                 </div>
 

@@ -90,7 +90,7 @@ exports.signup = function(req, res) {
 
                             var html = "<h4>User registered successfully.</h4>";
                             html += "<p>Please Click on following link to activate your account</p>";
-                            html += "<a href='http://"+config.frontEndHost+"/activateUser/"+token+"'>Click Here</a>";
+                            html += "<a target='_BLANK' href='"+config.frontEndHost+"/activateUser/"+token+"'>Click Here</a>";
                             emailHandler.sendEmail(email, "User Registeration", html, function(err, result) {
                                 if(err != null) {
                                     res.send(responseGenerator.getResponse(201, "User registered successfully, But Failed to send Account verification link on your email", []));

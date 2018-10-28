@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import {environment} from './../../environments/environment';
 import {ToastrService} from 'ngx-toastr';
-import {Observable, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
   BASE_URL: any;
-  Token: any;
-  constructor(private toastr: ToastrService, private http: Http) { 
+  Token: any = "";
+  constructor(private toastr: ToastrService, private http: Http, private route: Router) { 
     this.BASE_URL = environment.base_url;
   }
 
@@ -35,7 +36,7 @@ export class MainService {
 
   private showSuccessToastr(msg, title) {
     this.toastr.success(msg, title, {
-      timeOut: 20000,
+      timeOut: 4000,
       closeButton: true,
       messageClass: "toast-message"
     });
@@ -67,10 +68,15 @@ export class MainService {
 
   postRequest(apiName: any, body: any = null, content_type = "application/json") : Observable<any> {
     if(this.checkNetworkStatus()) {
-      var token = this.getToken();
+      
+      var token = this.Token
+      token = token != "" ? token : this.getToken();
 
       var headers = new Headers();
-      headers.append('Content-Type', 'application/json');
+      headers.append('Content-Type', content_type);
+      if(token != "")
+        headers.append('auth', token);
+
       let options = new RequestOptions({ headers: headers });
       return this.http.post(this.BASE_URL + apiName, body, options).pipe(
           map(this.extractData),
@@ -160,16 +166,26 @@ export class MainService {
       return false;
   }
 
-  setToken(token = "") {
-    localStorage.setItem("token", token);
-    this.Token = token;
+  setUserDetails(userData) {
+    console.log(userData);
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("name", userData.name);
+    localStorage.setItem("email", userData.email);
+
+    this.Token = userData.token;
   }
 
   getToken() {
-    return localStorage.getItem("token");
+    this.Token = localStorage.getItem("token");
+    return this.Token;
   }
 
-  removeToken() {
-    localStorage.removeItem("token");
+  removeUserDetails() {
+    this.Token = "";
+    localStorage.clear();
+  }
+
+  navigateToComponent(path) {
+    this.route.navigate([path]);
   }
 }

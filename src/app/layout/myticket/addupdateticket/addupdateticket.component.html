@@ -1,15 +1,14 @@
 <div class="row pageContainer">
     <div class="col-md-12">
-        <div class="jumbotron pt-3">
+        <div class="jumbotron pt-3 pb-0">
             <h2 class="h2 h2-responsive text-info">Post New Ticket</h2>
             <div class="row">
               <div class="col-md-6 col-sm-12">
                   <form #TicketFormRef="ngForm" novalidate>
-                      <mat-form-field class="full-width">
+                      <mat-form-field class="full-width p-1">
                         <mat-select required #TicketTypeRef="ngModel" id="ticketType" name="ticketType" [(ngModel)]="ticketType" placeholder="Ticket Type">
                           <mat-option value="">Select</mat-option>
-                          <mat-option value="test1">Test1</mat-option>
-                          <mat-option value="test2">Test2</mat-option>
+                          <mat-option *ngFor="let type of ticketTypes" [value]="type.id">{{type.name}}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="TicketTypeRef.invalid && (TicketTypeRef.dirty || TicketTypeRef.touched)">
                           <span *ngIf="TicketTypeRef.errors.required" color="warn">
@@ -18,7 +17,7 @@
                         </mat-error>
                       </mat-form-field>
 
-                      <mat-form-field class="full-width">
+                      <mat-form-field class="full-width p-1">
                         <input required #TitleRef="ngModel" autocomplete="off" id="title" name="title" [(ngModel)]="title" type="text" matInput placeholder="Ticket Title">
                         <mat-error *ngIf="TitleRef.invalid && (TitleRef.dirty || TitleRef.touched)">
                           <span *ngIf="TitleRef.errors.required" color="warn">
@@ -26,8 +25,8 @@
                           </span>
                         </mat-error>
                       </mat-form-field>
-                      <mat-form-field class="full-width">
-                        <textarea required rows="5" #DescriptionRef="ngModel" id="decription" name="decription" [(ngModel)]="decription" matInput placeholder="Ticket Description"></textarea>
+                      <mat-form-field class="full-width p-1">
+                        <textarea required rows="5" #DescriptionRef="ngModel" id="decription" name="decription" [(ngModel)]="description" matInput placeholder="Ticket Description"></textarea>
                         <mat-error *ngIf="DescriptionRef.invalid && (DescriptionRef.dirty || DescriptionRef.touched)">
                           <span *ngIf="DescriptionRef.errors.required" color="warn">
                             Please fill out this field
@@ -41,10 +40,12 @@
                         <button type="button" (click)="file.click()" class="full-width" mat-stroked-button>Select File</button>
                       </p>
 
-                      <mat-form-field class="full-width">
+                      <mat-form-field class="full-width p-1">
                         <mat-select required #TicketPriorityRef="ngModel" autocomplete="off" id="ticketPriority" name="ticketPriority" [(ngModel)]="ticketPriority" placeholder="Ticket Priority">
-                          <mat-option value="test1">Test1</mat-option>
-                          <mat-option value="test2">Test2</mat-option>
+                          <mat-option value="">Select</mat-option>
+                          <mat-option value="high">High</mat-option>
+                          <mat-option value="medium">Medium</mat-option>
+                          <mat-option value="low">Low</mat-option>
                         </mat-select>
                         <mat-error *ngIf="TicketPriorityRef.invalid && (TicketPriorityRef.dirty || TicketPriorityRef.touched)">
                           <span *ngIf="TicketPriorityRef.errors.required" color="warn">
@@ -53,11 +54,10 @@
                         </mat-error>
                       </mat-form-field>
                       
-                      <mat-form-field class="full-width">
+                      <mat-form-field class="full-width p-1">
                         <mat-select required #ContactTypeRef="ngModel" id="contactType" name="contactType" [(ngModel)]="contactType" placeholder="Personal Contact Option">
-                          <mat-option value="email">Email</mat-option>
-                          <mat-option value="phone">Phone</mat-option>
-                          <mat-option value="both">Both</mat-option>
+                          <mat-option value="">Select</mat-option>
+                          <mat-option *ngFor="let contact of contactTypes" [value]="contact">{{contact}}</mat-option>
                         </mat-select>
                         <mat-error *ngIf="ContactTypeRef.invalid && (ContactTypeRef.dirty || ContactTypeRef.touched)">
                           <span *ngIf="ContactTypeRef.errors.required" color="warn">
@@ -66,7 +66,7 @@
                         </mat-error>
                       </mat-form-field>
 
-                      <mat-form-field *ngIf="contactType == 'email' || contactType == 'both'" class="full-width">
+                      <mat-form-field *ngIf="contactType == 'email' || contactType == 'both'" class="full-width p-1">
                         <input required #EmailRef="ngModel" autocomplete="off" id="email" name="email" [(ngModel)]="email" type="email" matInput placeholder="Your Email" pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'>
                         <mat-error *ngIf="EmailRef.invalid && (EmailRef.dirty || EmailRef.touched)">
                           <span *ngIf="EmailRef.errors.required" color="warn">
@@ -78,7 +78,7 @@
                         </mat-error>
                       </mat-form-field>
 
-                      <mat-form-field *ngIf="contactType == 'phone' || contactType == 'both'" class="full-width">
+                      <mat-form-field *ngIf="contactType == 'phone' || contactType == 'both'" class="full-width p-1">
                         <input required #PhoneRef="ngModel" autocomplete="off" id="phone" name="phone" [(ngModel)]="phone" type="text" matInput placeholder="Your Phone" pattern='^(0|[1-9][0-9]*)$'>
                         <mat-error *ngIf="PhoneRef.invalid && (PhoneRef.dirty || PhoneRef.touched)">
                           <span *ngIf="PhoneRef.errors.required" color="warn">
@@ -91,7 +91,7 @@
                       </mat-form-field>
                       <p class="text-center">
                         <br/>
-                        <button type="submit" mat-raised-button color="primary">Post Ticket</button>
+                        <button (click)="addUpdateTicket(TicketFormRef)" type="submit" mat-raised-button color="primary">Post Ticket</button>
                       </p>
                     </form>
               </div>
