@@ -9,7 +9,7 @@ exports.verifyRequest = function(req, res, next) {
     if(token) {
         jwt.verify(token, config.privateKey, function(err, result) {
             if(err) {
-                res.send(responseGenerator.getResponse(500, errorMsg.tokenInvalid, []))
+                res.send(responseGenerator.getResponse(501, errorMsg.tokenInvalid, []))
             }
             else {
                 res.locals.result = result;
@@ -18,7 +18,7 @@ exports.verifyRequest = function(req, res, next) {
         });
     }
     else {
-        res.send(responseGenerator.getResponse(500, errorMsg.tokenInvalid, []))
+        res.send(responseGenerator.getResponse(501, errorMsg.tokenInvalid, []))
     }
 };
 

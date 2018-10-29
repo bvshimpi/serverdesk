@@ -28,6 +28,10 @@ export class TicketsComponent implements OnInit {
           this.mainServiceObj.ShowAlert('error', "Failed to get tickets.");
         }
       }
+      else if(Response.Status == "501"){
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+        this.mainServiceObj.navigateToComponent("/serverdesk/login");
+      }
       else {
         this.mainServiceObj.ShowAlert('error', Response.Message);
       }
@@ -54,6 +58,10 @@ export class TicketsComponent implements OnInit {
       if(Response.Status == "200") {
         if(typeof Response.Data != "undefined") {
           this.tickets = Response.Data;
+        }
+        else if(Response.Status == "501"){
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+          this.mainServiceObj.navigateToComponent("/serverdesk/login");
         }
         else {
           this.mainServiceObj.ShowAlert('error', "Failed to get tickets.");

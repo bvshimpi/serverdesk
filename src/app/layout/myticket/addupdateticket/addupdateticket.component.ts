@@ -45,6 +45,10 @@ export class AddupdateticketComponent implements OnInit {
           this.mainServiceObj.ShowAlert('error', "Failed to get ticket types.");
         }
       }
+      else if(Response.Status == "501"){
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+        this.mainServiceObj.navigateToComponent("/serverdesk/login");
+      }
       else {
         this.mainServiceObj.ShowAlert('error', Response.Message);
       }
@@ -79,6 +83,10 @@ export class AddupdateticketComponent implements OnInit {
             this.mainServiceObj.ShowAlert('error', "Failed to get ticket data.");
           }
         }
+        else if(Response.Status == "501"){
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+          this.mainServiceObj.navigateToComponent("/serverdesk/login");
+        }
         else {
           this.mainServiceObj.ShowAlert('error', Response.Message);
         }
@@ -109,6 +117,10 @@ export class AddupdateticketComponent implements OnInit {
         if(Response.Status == "200") {
           this.mainServiceObj.ShowAlert('success', Response.Message);
           this.mainServiceObj.navigateToComponent("/serverdesk/myTickets");
+        }
+        else if(Response.Status == "501"){
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+          this.mainServiceObj.navigateToComponent("/serverdesk/login");
         }
         else {
           this.mainServiceObj.ShowAlert('error', Response.Message);
