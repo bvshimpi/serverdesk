@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MainService} from './../../../service/main.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+declare var $: any;
 
 @Component({
   selector: 'app-tickets',
@@ -10,11 +11,40 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class TicketsComponent implements OnInit {
 
   tickets:any = [];
+  users:any = [];
+  ticketId:any = "";
+  userId:any;
+  ticketStatus:any;
+  tid:any;
 
-  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { }
+  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { 
+    this.getUsers();
+  }
 
   ngOnInit() {
     this.getTickets();
+  }
+
+  getUsers() {
+    this.mainServiceObj.postRequest("getUsers").subscribe(Response => {
+      if(Response.Status == "200") {
+        if(typeof Response.Data != "undefined") {
+          this.users = Response.Data;
+        }
+        else {
+          this.mainServiceObj.ShowAlert('error', "Failed to get users.");
+        }
+      }
+      else if(Response.Status == "501"){
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+        this.mainServiceObj.navigateToComponent("/serverdesk/login");
+      }
+      else {
+        this.mainServiceObj.ShowAlert('error', Response.Message);
+      }
+    }, error => {
+      this.mainServiceObj.HandleErrorMessages(error);
+    });
   }
 
   getTickets() {
@@ -57,7 +87,8 @@ export class TicketsComponent implements OnInit {
     this.mainServiceObj.postRequest("deleteTicket", requestBody).subscribe(Response => {
       if(Response.Status == "200") {
         if(typeof Response.Data != "undefined") {
-          this.tickets = Response.Data;
+          this.mainServiceObj.ShowAlert('success', Response.Message);
+          this.getTickets();
         }
         else if(Response.Status == "501"){
           this.mainServiceObj.ShowAlert('error', Response.Message);
@@ -77,7 +108,44 @@ export class TicketsComponent implements OnInit {
     });
   }
 
-  updateStatus(data) {
-    console.log(data);
+  showModal(data) {
+    this.ticketId = data.ticket_id;
+    this.tid = data.id;
+    this.ticketStatus = data.status;
+    this.userId = data.assignee != 0 ? data.assignee : "";
+    $("#exampleModal").modal('show');
+  }
+
+  resetUser() {
+    this.userId = "";
+  }
+
+  updateStatus(TicketFormRef) {
+    if(TicketFormRef.valid) {
+      var requestBody = {
+        "status": this.ticketStatus,
+        "user_id": this.userId,
+        "id": this.tid
+      }
+      this.spinner.show();
+      this.mainServiceObj.postRequest("updateTicketStatus", requestBody).subscribe(Response => {
+        if(Response.Status == "200") {
+            $("#exampleModal").modal('hide');
+            this.mainServiceObj.ShowAlert('success', Response.Message);
+            this.getTickets();
+        }
+        else if(Response.Status == "501"){
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+          this.mainServiceObj.navigateToComponent("/serverdesk/login");
+        }
+        else {
+          this.mainServiceObj.ShowAlert('error', Response.Message);
+        }
+        this.spinner.hide();
+      }, error => {
+        this.mainServiceObj.HandleErrorMessages(error);
+        this.spinner.hide();
+      });
+    }
   }
 }

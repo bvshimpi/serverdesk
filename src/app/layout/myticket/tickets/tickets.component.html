@@ -24,7 +24,7 @@
                         <i class="fa fa-trash fa-1x" aria-hidden="true"></i>
                     </a>
                     &nbsp;|&nbsp;
-                    <a title="Click to Update Status" (click)="updateStatus(ticket.data)">
+                    <a title="Click to Update Status" (click)="showModal(ticket.data)">
                         <i class="fa fa-flag fa-1x" aria-hidden="true"></i>
                     </a> 
                 </div>
@@ -37,4 +37,59 @@
         </div>
     </div>
 </div>
+
+<!-- Central Modal Small -->
+<!-- The Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Ticket Status ({{ticketId}})</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form #TicketFormRef="ngForm" novalidate>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="full-width p-1">
+                        <mat-select required #TicketStatus="ngModel" autocomplete="off" id="ticketStatus" (selectionChange)="resetUser()" name="ticketStatus" [(ngModel)]="ticketStatus" placeholder="Ticket Status">
+                            <mat-option value="">Select Status</mat-option>
+                            <mat-option value="open">Open</mat-option>
+                            <mat-option value="resolved">Resolved</mat-option>
+                            <mat-option value="closed">Closed</mat-option>
+                            <mat-option value="in process">In Process</mat-option>
+                            <mat-option value="invalid">Invalid</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="TicketStatus.invalid && (TicketStatus.dirty || TicketStatus.touched)">
+                            <span *ngIf="TicketStatus.errors.required" color="warn">
+                            Please fill out this field
+                            </span>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width p-1" *ngIf="ticketStatus == 'resolved' || ticketStatus == 'closed' || ticketStatus == 'in process'">
+                        <mat-select required #UserIdStatus="ngModel" autocomplete="off" id="userId" name="userId" [(ngModel)]="userId" placeholder="Select User Name">
+                            <mat-option value="">Select User</mat-option>
+                            <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}} ({{user.email}})</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="UserIdStatus.invalid && (UserIdStatus.dirty || UserIdStatus.touched)">
+                            <span *ngIf="UserIdStatus.errors.required" color="warn">
+                            Please fill out this field
+                            </span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" (click)="updateStatus(TicketFormRef)">Save changes</button>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+  <!-- Central Modal Small -->
 

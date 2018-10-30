@@ -7,4 +7,7 @@ router.post("/getTicketTypes", common.verifyRequest, ticket.getTicketTypes);
 router.post("/addUpdateTicket", common.verifyRequest, ticket.addUpdateTicket);
 router.post("/getTickets", common.verifyRequest, ticket.getTickets);
 router.post("/getTicket", common.verifyRequest, ticket.getTicket);
+router.post("/deleteTicket", common.verifyRequest, ticket.deleteTicket);
+router.post("/updateTicketStatus", common.verifyRequest, ticket.updateTicketStatus);
+
 module.exports = router;

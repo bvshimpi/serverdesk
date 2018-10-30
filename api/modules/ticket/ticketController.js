@@ -67,7 +67,7 @@ exports.getTickets = function(req, res) {
     var result = res.locals.result;
     if(result) {
         var uid = result.id;
-        var qry = "SELECT t.id, ticket_id,title,status,priority,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ? ORDER BY t.id DESC";
+        var qry = "SELECT t.id, ticket_id,title,UCASE(status) as status,UCASE(priority) as priority,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ? ORDER BY t.id DESC";
         db.query(qry, result.id, function(errQuery, resQuery) {
             if(errQuery)
                 res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []));
@@ -88,7 +88,7 @@ exports.getTicket = function(req, res) {
     var result = res.locals.result;
     if(result) {
         var uid = result.id;
-        var id = req.body.id;
+        var id = typeof req.body.id != "undefined" ? req.body.id : null;
         if(id != null) {
             var qry = "SELECT t.*,tc.contact_type,tc.email,tc.phone FROM ticket t INNER JOIN ticket_contact tc ON t.ticket_id = tc.tid WHERE t.id = ? AND t.user_id = ?";
             var values = [id, uid];
@@ -109,5 +109,59 @@ exports.getTicket = function(req, res) {
     }
     else {
         res.send(responseGenerator.getResponse(500, "Failed to get ticket", []))
+    }
+}
+
+exports.deleteTicket = function(req, res) {
+    var result = res.locals.result;
+    if(result) {
+        var uid = result.id;
+        var id = typeof req.body.id != "undefined" ? req.body.id : null;
+        var ticket_id = typeof req.body.ticket_id != "undefined" ? req.body.ticket_id : null;
+        if(id != null && ticket_id != null) {
+            var qry = "DELETE FROM ticket WHERE id = ?;DELETE FROM ticket_contact WHERE tid = ?";
+            var values = [id, ticket_id];
+            db.query(qry, values, function(errQuery, resQuery) {
+                if(errQuery)
+                    res.send(responseGenerator.getResponse(500, "Failed to delete tickets", []));
+                else {
+                    res.send(responseGenerator.getResponse(200, "Ticket deleted successfully.", resQuery[0]));
+                }
+            });
+        }
+        else {
+            res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []))
+        }
+    }
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to delete ticket", []))
+    }
+}
+
+exports.updateTicketStatus = function(req, res) {
+    var result = res.locals.result;
+    if(result) {
+        var id = typeof req.body.id != "undefined" ? req.body.id : null;
+        var status = typeof req.body.status != "undefined" ? req.body.status : "";
+        var user_id = typeof req.body.user_id != "undefined" && req.body.user_id != "" ? req.body.user_id : 0;
+
+        var status = typeof req.body.status != "undefined" ? req.body.status : null;
+        if(id != null && status != "") {
+            var qry = "UPDATE ticket SET status = ?, assignee = ? WHERE id = ?";
+            var values = [status, user_id, id];
+            db.query(qry, values, function(errQuery, resQuery) {
+                if(errQuery)
+                    res.send(responseGenerator.getResponse(500, "Failed to update ticket status", []));
+                else {
+                    res.send(responseGenerator.getResponse(200, "Ticket status updated successfully.", resQuery[0]));
+                }
+            });
+        }
+        else {
+            res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []))
+        }
+    }
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to update ticket status", []))
     }
 }

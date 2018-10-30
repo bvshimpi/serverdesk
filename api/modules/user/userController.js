@@ -133,6 +133,26 @@ exports.activateAccount = function(req, res) {
     }
 };
 
+exports.getUsers = function(req, res) {
+  
+    var result = res.locals.result;
+    if(result) {
+
+        var query = "SELECT id,name,email FROM users";
+        db.query(query, function(errQuery, resQuery) {
+            if(errQuery) {
+                res.send(responseGenerator.getResponse(500, "Failed to get users", []))
+            }
+            else {
+                res.send(responseGenerator.getResponse(200, "Users found.", resQuery))
+            }
+        });  
+    }  
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to get users", []))
+    }
+};
+
 function accountCheck(email, callback) {
     var qry = "SELECT id from users WHERE email = ?";
     db.query(qry, email, function(errQuery, resQuery) {
