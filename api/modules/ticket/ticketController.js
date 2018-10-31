@@ -67,7 +67,7 @@ exports.getTickets = function(req, res) {
     var result = res.locals.result;
     if(result) {
         var uid = result.id;
-        var qry = "SELECT t.id, ticket_id,title,UCASE(status) as status,UCASE(priority) as priority,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ? ORDER BY t.id DESC";
+        var qry = "SELECT t.id, ticket_id,title,UCASE(status) as status,UCASE(priority) as priority,assignee,tt.name FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id WHERE t.user_id = ? ORDER BY t.id DESC";
         db.query(qry, result.id, function(errQuery, resQuery) {
             if(errQuery)
                 res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []));

@@ -13,6 +13,7 @@ export class TicketsComponent implements OnInit {
   tickets:any = [];
   users:any = [];
   ticketId:any = "";
+
   userId:any;
   ticketStatus:any;
   tid:any;
@@ -109,9 +110,10 @@ export class TicketsComponent implements OnInit {
   }
 
   showModal(data) {
+    console.log(data);
     this.ticketId = data.ticket_id;
     this.tid = data.id;
-    this.ticketStatus = data.status;
+    this.ticketStatus = data.status.toLowerCase();
     this.userId = data.assignee != 0 ? data.assignee : "";
     $("#exampleModal").modal('show');
   }
