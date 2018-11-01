@@ -153,6 +153,17 @@ exports.getUsers = function(req, res) {
     }
 };
 
+exports.isLogined = function(req, res) {
+
+    var result = res.locals.result;
+    if(result) {
+        res.send(responseGenerator.getResponse(200, "Users is logined.", []));
+    }  
+    else {
+        res.send(responseGenerator.getResponse(500, "User is not logined", []))
+    }
+};
+
 function accountCheck(email, callback) {
     var qry = "SELECT id from users WHERE email = ?";
     db.query(qry, email, function(errQuery, resQuery) {

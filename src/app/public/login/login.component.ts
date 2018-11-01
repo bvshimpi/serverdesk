@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
       this.mainServiceObj.postRequest("login", requestBody).subscribe(Response => {
         if(Response.Status == "200") {
           if(typeof Response.Data != "undefined") {
+            this.mainServiceObj.setIsLogined(true);
             this.mainServiceObj.setUserDetails(Response.Data);
             this.mainServiceObj.navigateToComponent('/serverdesk/myTickets');
           }

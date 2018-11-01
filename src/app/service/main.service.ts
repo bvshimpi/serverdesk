@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from './../../environments/environment';
 import {ToastrService} from 'ngx-toastr';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { map } from 'rxjs/operators';
@@ -13,6 +13,10 @@ import { Router } from '@angular/router';
 export class MainService {
   BASE_URL: any;
   Token: any = "";
+
+  private isLogined = new Subject<any>();
+  methodForIsLogined = this.isLogined.asObservable();
+
   constructor(private toastr: ToastrService, private http: Http, private route: Router) { 
     this.BASE_URL = environment.base_url;
   }
@@ -66,6 +70,9 @@ export class MainService {
     });
   }
 
+  setIsLogined(value) {
+    this.isLogined.next(value);
+  }
   postRequest(apiName: any, body: any = null, content_type = "application/json") : Observable<any> {
     if(this.checkNetworkStatus()) {
       
