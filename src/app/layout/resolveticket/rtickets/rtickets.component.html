@@ -1,23 +1,24 @@
 <div class="row pageContainer">
     <div class="col-md-12">
         <div class="jumbotron pt-3">
-            <h2 class="h2 h2-responsive text-info">My Posted Tickets</h2>
-            <dx-data-grid id="gridContainer" [dataSource]="customers" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true">
+            <h2 class="h2 h2-responsive text-info">Resolve Tickets</h2>
+            <dx-data-grid id="gridContainer" [dataSource]="tickets" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true">
                 <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
                 <dxo-load-panel [enabled]="true"></dxo-load-panel>
                 <dxo-sorting mode="multiple"></dxo-sorting>
                 <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
 
-                <dxi-column caption="Company Name" dataField="CompanyName"></dxi-column>
-                <dxi-column caption="City" dataField="City"></dxi-column>
-                <dxi-column caption="State" dataField="State"></dxi-column>
-                <dxi-column caption="Phone" [width]="140" dataField="Phone"></dxi-column>
-                <dxi-column caption="Fax" dataField="Fax"></dxi-column>
-                <dxi-column dataField="Action" [allowFiltering]="false" [allowSorting]="false" cellTemplate="cellTemplate" [width]="190"></dxi-column>
-                <div *dxTemplate="let data of 'cellTemplate'">
-                    <a  title="Click to View Contract" (click)="ViewContractDetails(data)">
-                        <i class="icon-eye icons"></i>
-                    </a> 
+                <dxi-column caption="Ticket Id" dataField="ticket_id"></dxi-column>
+                <dxi-column caption="Ticket Type" dataField="name"></dxi-column>
+                <dxi-column caption="Title" dataField="title"></dxi-column>
+                <dxi-column caption="Status" dataField="status"></dxi-column>
+                <dxi-column caption="Priority" dataField="priority"></dxi-column>
+                <dxi-column caption="Posted Date" dataField="posted_date"></dxi-column>
+                <dxi-column dataField="Action" [allowFiltering]="false" [allowSorting]="false" cellTemplate="cellTemplate" [width]="90"></dxi-column>
+                <div *dxTemplate="let ticket of 'cellTemplate'" class="text-center">
+                    <a title="Click to View Ticket" (click)="viewTicket(ticket.data)">
+                        <i class="fa fa-comment fa-2x text-info" aria-hidden="true"></i>
+                    </a>
                 </div>
 
                 <!-- <dxo-remote-operations [filtering]="true" [sorting]="true" [paging]="true" [grouping]="true">
@@ -27,5 +28,83 @@
             </dx-data-grid>
         </div>
     </div>
+    <!-- Central Modal Small -->
+    <!-- The Modal -->
+    <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fluid" role="document" style="width:90%">
+            <div class="modal-content" style="height:620px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">{{title}} ({{ticketId}})</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body" style="overflow-y:auto;">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12 text-center">
+                            <img [src]="screenshot" style="max-height: 525px">
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <p class="p-1">
+                                <mdb-card>
+                                    <mdb-card-header class="secondary-color lighten-1 white-text">
+                                        Ticket Type
+                                    </mdb-card-header>
+                                    <mdb-card-body>
+                                        <mdb-card-title>{{type}}</mdb-card-title>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </p>
+                            <p class="p-1">
+                                <mdb-card>
+                                    <mdb-card-header class="deep-orange lighten-1 white-text">
+                                        Contact Person
+                                    </mdb-card-header>
+                                    <mdb-card-body>
+                                        <mdb-card-title>{{name}}</mdb-card-title>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </p>
+                            <p class="p-1">
+                                <mdb-card>
+                                    <mdb-card-header class="primary-color lighten-1 white-text">
+                                        Contact Email
+                                    </mdb-card-header>
+                                    <mdb-card-body>
+                                        <mdb-card-title>{{email}}</mdb-card-title>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </p>
+                            <p class="p-1">
+                                <mdb-card>
+                                    <mdb-card-header class="success-color lighten-1 white-text">
+                                        Contact Phone
+                                    </mdb-card-header>
+                                    <mdb-card-body>
+                                        <mdb-card-title>{{phone}}</mdb-card-title>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="p-1">
+                                <mdb-card>
+                                    <mdb-card-header class="elegant-color lighten-1 white-text">
+                                        Description
+                                    </mdb-card-header>
+                                    <mdb-card-body>
+                                        <mdb-card-title>{{description}}</mdb-card-title>
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+          <!-- Central Modal Small -->
+        
 </div>
-

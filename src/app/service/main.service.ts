@@ -95,6 +95,23 @@ export class MainService {
     }
   }
 
+  postTicket(apiName, body: any = null, content_type = "application/json"): Observable<any> {
+    if(this.checkNetworkStatus()) {
+        var headers = new Headers();
+        headers.append('content-type', 'multipart/form-data');
+        // headers.append('auth', token);
+        var options = JSON.stringify({ headers: headers });
+        // let options = new RequestOptions({ headers: headers });
+        return this.http.post(this.BASE_URL + apiName, body, options).pipe(
+          map(this.extractData),
+          catchError(this.handleErrorObservable)
+      )
+    }
+    else {
+      this.ShowAlert('error', "Please Check your internet connection.");
+    }
+  }
+
   private extractData(res: Response) {
     console.log("res", res);
     if (res.status === 200) {

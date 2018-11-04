@@ -3,3 +3,9 @@ $headerLogoHeight: 35px;
 .headerLogo {
     height: $headerLogoHeight;
 }
+
+li {
+    a.active {
+        font-weight:bold;
+    }
+}

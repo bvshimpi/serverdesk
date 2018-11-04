@@ -34,11 +34,16 @@
                         </mat-error>
                       </mat-form-field>
                       
-                      <p>
-                        <input #file type="file" name="screenshot" id="screenshot" [(ngModel)]="screenshot" style="display:none" accept="image/*">
-                        <label>Upload Ticket Screenshot</label>
-                        <button type="button" (click)="file.click()" class="full-width" mat-stroked-button>Select File</button>
-                      </p>
+                      <div class="row">
+                        <div class="col-md-9">
+                          <input #file type="file" name="screenshot" id="screenshot" [(ngModel)]="screenshot" style="display:none" (change)="fileSelect($event)" accept="image/*">
+                          <label>Upload Ticket Screenshot <span *ngIf="filename" style="font-weight:bold">({{filename}})</span></label>
+                          <button type="button" class="full-width" (click)="file.click()" mat-stroked-button>Select File</button>
+                        </div>
+                        <div class="col-md-3">
+                          <img *ngIf="full_path" [src]="full_path" width="100">
+                        </div>
+                      </div>
 
                       <mat-form-field class="full-width p-1">
                         <mat-select required #TicketPriorityRef="ngModel" autocomplete="off" id="ticketPriority" name="ticketPriority" [(ngModel)]="ticketPriority" placeholder="Ticket Priority">

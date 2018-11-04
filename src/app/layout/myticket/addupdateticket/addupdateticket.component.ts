@@ -21,14 +21,19 @@ export class AddupdateticketComponent implements OnInit {
   ticketPriority: any;
   id: any = null;
   ticket_id:any = null;
-
+  screenshot:any;
+  fileUpload:any = [];
+  filename:any;
+  full_path:any;
   constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getTicketTypes();
     this.route.params.subscribe(params => {
-      this.id = atob(params["id"]);
-      this.ticket_id = atob(params["tid"]);
+      // if(params.length > 0) {
+        this.id = atob(params["id"]);
+        this.ticket_id = atob(params["tid"]);
+      // }
     });
 
     this.getTicket();
@@ -59,6 +64,15 @@ export class AddupdateticketComponent implements OnInit {
     });
   }
 
+  fileSelect(obj) {
+    this.fileUpload = <Array<File>>obj.target.files;
+    this.filename = obj.target.files[0]['name'];
+
+    const reader = new FileReader();
+    reader.onload = e => this.full_path = reader.result;
+    reader.readAsDataURL(obj.target.files[0]);
+  }
+
   getTicket() {
     if(this.id != null && this.ticket_id != null) {
       var requestBody = {
@@ -78,6 +92,9 @@ export class AddupdateticketComponent implements OnInit {
             this.contactType = data.contact_type,
             this.email = data.email;
             this.phone = data.phone;
+            this.filename = data.screenshot;
+            if(data.screenshot != "")
+              this.full_path = this.mainServiceObj.BASE_URL + "/uploads/tickets/"+data.screenshot;
           }
           else {
             this.mainServiceObj.ShowAlert('error', "Failed to get ticket data.");
@@ -101,6 +118,7 @@ export class AddupdateticketComponent implements OnInit {
   addUpdateTicket(TicketFormRef) {
     if(TicketFormRef.valid) {
       this.spinner.show();
+      
       var requestBody = {
         "id": this.id,
         "ticket_id": this.ticket_id,
@@ -110,10 +128,20 @@ export class AddupdateticketComponent implements OnInit {
         "ticket_type": this.ticketType,
         "priority": this.ticketPriority,
         "email": this.email,
-        "phone": this.phone
+        "phone": this.phone,
+        "screenshot": Date.now() + "_" + this.filename,
+        "name": localStorage.getItem("name"),
+        "token": this.mainServiceObj.getToken()
       };
 
-      this.mainServiceObj.postRequest("addUpdateTicket", requestBody).subscribe(Response => {
+      var formData:FormData = new FormData();
+      formData.append("ticket", JSON.stringify(requestBody));
+      if(this.fileUpload.length > 0) {
+        const file: File = this.fileUpload[0];
+        formData.append("file", file, file.name);
+      }
+      console.log(formData);
+      this.mainServiceObj.postTicket("addUpdateTicket", formData).subscribe(Response => {
         if(Response.Status == "200") {
           this.mainServiceObj.ShowAlert('success', Response.Message);
           this.mainServiceObj.navigateToComponent("/serverdesk/myTickets");

@@ -25,42 +25,53 @@ exports.getTicketTypes = function(req, res) {
 }
 
 exports.addUpdateTicket = function(req, res) {
-    var result = res.locals.result;
-    if(result) {
-        var id = req.body.id != null ? parseInt(req.body.id) : 0;
-        var uid = result.id;
-        var title = typeof req.body.title != "undefined" ? req.body.title : "";
-        var description = typeof req.body.description != "undefined" ? req.body.description : "";
-        var ticket_type = typeof req.body.ticket_type != "undefined" ? req.body.ticket_type : "";
-        var priority = typeof req.body.priority != "undefined" ? req.body.priority : "";
-        var contact_type = typeof req.body.contact_type != "undefined" ? req.body.contact_type : "";
-        var email = typeof req.body.email != "undefined" ? req.body.email : "";
-        var phone = typeof req.body.phone != "undefined" ? req.body.phone : "";
-        var ticket_id = typeof req.body.ticket_id != "undefined" ? req.body.ticket_id : null;
-        
-        if((phone != "" || email != "") && priority != "" && ticket_type != "" && title != "" && description != "" && contact_type != "") {
-            var screenshot = "";
-            if(ticket_id == null || id == null) {
-                var random_no = Math.floor(Math.random() * 90 + 10);
-                ticket_id = "T"+random_no+Date.now();
+    var reqData = JSON.parse(req.body.ticket);
+    var token = reqData.token;
+    if(token) {
+        jwt.verify(token, config.privateKey, function(err, result) {
+            if(err) {
+                res.send(responseGenerator.getResponse(501, errorMsg.tokenInvalid, []))
             }
-            
-            var values = [id,uid,title,description,ticket_type,priority,email,phone,screenshot,ticket_id,contact_type];
-            db.query("CALL add_update_ticket(?,?,?,?,?,?,?,?,?,?,?);", values, function(errQuery, resQuery) {
-                if(errQuery)
-                    res.send(responseGenerator.getResponse(500, "Failed to process ticket", []));
-                else  {
-                    var msg = "Ticket posted succesfully.";
-                    msg = id != null ? "Ticket updated succesfully.": msg;
-                    res.send(responseGenerator.getResponse(200, msg, resQuery));
+            else {
+                var id = reqData.id != null ? parseInt(reqData.id) : 0;
+                var uid = result.id;
+                var title = typeof reqData.title != "undefined" ? reqData.title : "";
+                var description = typeof reqData.description != "undefined" ? reqData.description : "";
+                var ticket_type = typeof reqData.ticket_type != "undefined" ? reqData.ticket_type : "";
+                var priority = typeof reqData.priority != "undefined" ? reqData.priority : "";
+                var contact_type = typeof reqData.contact_type != "undefined" ? reqData.contact_type : "";
+                var email = typeof reqData.email != "undefined" ? reqData.email : "";
+                var phone = typeof reqData.phone != "undefined" ? reqData.phone : "";
+                var name = typeof reqData.name != "undefined" ? reqData.name : "";
+                var ticket_id = typeof reqData.ticket_id != "undefined" ?reqData.ticket_id : null;
+                var fileUpload = typeof reqData.fileUpload != "undefined" ?reqData.fileUpload : 0;
+                var screenshot = typeof reqData.screenshot != "undefined" ?reqData.screenshot : "";
+
+                if((phone != "" || email != "") && priority != "" && ticket_type != "" && title != "" && description != "" && contact_type != "") {
+                    
+                    if(ticket_id == null || id == null) {
+                        var random_no = Math.floor(Math.random() * 90 + 10);
+                        ticket_id = "T"+random_no+Date.now();
+                    }
+                    
+                    var values = [id,uid,title,description,ticket_type,priority,email,phone,screenshot,ticket_id,contact_type,name];
+                    db.query("CALL add_update_ticket(?,?,?,?,?,?,?,?,?,?,?,?);", values, function(errQuery, resQuery) {
+                        if(errQuery)
+                            res.send(responseGenerator.getResponse(500, "Failed to process ticket", []));
+                        else  {
+                            var msg = "Ticket posted succesfully.";
+                            msg = id != null ? "Ticket updated succesfully.": msg;
+                            res.send(responseGenerator.getResponse(200, msg, resQuery));
+                        }
+                    });
                 }
-            });
-        }
-        else 
-            res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []))
+                else 
+                    res.send(responseGenerator.getResponse(500, errorMsg.fieldMissing, []))
+            }
+        });
     }
     else {
-        res.send(responseGenerator.getResponse(500, "Failed to process your ticket", []))
+        res.send(responseGenerator.getResponse(501, errorMsg.tokenInvalid, []))
     }
 }
 exports.getTickets = function(req, res) {
@@ -163,5 +174,26 @@ exports.updateTicketStatus = function(req, res) {
     }
     else {
         res.send(responseGenerator.getResponse(500, "Failed to update ticket status", []))
+    }
+}
+
+exports.getRTickets = function(req, res) {
+    var result = res.locals.result;
+    if(result) {
+        var uid = result.id;
+        var qry = "SELECT ticket_id,title,description,screenshot,UCASE(status) as status,UCASE(priority) as priority,DATE_FORMAT(t.created_at, '%Y-%m-%d') as posted_date, tt.name, tc.contact_name,tc.email,tc.phone FROM ticket t INNER JOIN ticket_types tt ON t.ticket_type = tt.id INNER JOIN ticket_contact tc ON t.ticket_id = tc.tid WHERE t.user_id != ? AND t.status IN ('open', 'in process') ORDER BY t.id DESC";
+        db.query(qry, result.id, function(errQuery, resQuery) {
+            if(errQuery)
+                res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []));
+            else {
+                if(resQuery.length > 0)
+                    res.send(responseGenerator.getResponse(200, "Tickets found.", resQuery));
+                else
+                    res.send(responseGenerator.getResponse(500, "Tickets not found.", resQuery));
+            }
+        });
+    }
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []))
     }
 }
