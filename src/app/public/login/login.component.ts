@@ -12,7 +12,11 @@ export class LoginComponent implements OnInit {
   email: any;
   password: any;
 
-  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { }
+  constructor(private mainServiceObj: MainService, private spinner: NgxSpinnerService) { 
+    if(this.mainServiceObj.getToken()) {
+      this.mainServiceObj.navigateToComponent("/serverdesk/dashboard");
+    }
+  }
 
   ngOnInit() {
     
@@ -31,7 +35,7 @@ export class LoginComponent implements OnInit {
           if(typeof Response.Data != "undefined") {
             this.mainServiceObj.setIsLogined(true);
             this.mainServiceObj.setUserDetails(Response.Data);
-            this.mainServiceObj.navigateToComponent('/serverdesk/myTickets');
+            this.mainServiceObj.navigateToComponent("/serverdesk/dashboard");
           }
           else {
             this.mainServiceObj.ShowAlert('error', "Failed to login.");
