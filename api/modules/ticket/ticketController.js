@@ -74,6 +74,7 @@ exports.addUpdateTicket = function(req, res) {
         res.send(responseGenerator.getResponse(501, errorMsg.tokenInvalid, []))
     }
 }
+
 exports.getTickets = function(req, res) {
     var result = res.locals.result;
     if(result) {
@@ -190,6 +191,53 @@ exports.getRTickets = function(req, res) {
                     res.send(responseGenerator.getResponse(200, "Tickets found.", resQuery));
                 else
                     res.send(responseGenerator.getResponse(500, "Tickets not found.", resQuery));
+            }
+        });
+    }
+    else {
+        res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []))
+    }
+}
+
+exports.getDashboardData = function(req, res) {
+    var result = res.locals.result;
+    if(result) {
+        var uid = result.id;
+        db.query("CALL get_dashboard(?)", uid, function(errQuery, resQuery) {
+            if(errQuery)
+                res.send(responseGenerator.getResponse(500, "Failed to get ticket details", []));
+            else {
+                var tickets_summary = {};
+                if(resQuery[0].length > 0) {
+                    tickets_summary = resQuery[0][0];
+                }
+
+                var priority_summary = [{priority: "high", count: 0 }, {priority: "low", count: 0 }, {priority: "medium", count: 0 }];
+
+                if(resQuery[1].length > 0) {
+                    
+                    priority_summary.forEach(element => {
+                        let tiggerData = resQuery[1].find(obj => obj.priority == element.priority);
+                        if(typeof tiggerData != "undefined")
+                            element.count = tiggerData.count;
+                    });
+                }
+
+                var status_summary = [{"status": "open", "count": 0},{"status": "closed", "count": 0},{"status": "in process", "count": 0},{"status": "resolved", "count": 0},{"status": "invalid", "count": 0}];
+                if(resQuery[2].length > 0) {
+                    status_summary.forEach(element => {
+                        let tiggerData = resQuery[2].find(obj => obj.status == element.status);
+                        if(typeof tiggerData != "undefined")
+                            element.count = tiggerData.count;
+                    });
+                }
+
+                var ticket_details = {
+                    "tickets_summary": tickets_summary,
+                    "priority_summary": priority_summary,
+                    "status_summary": status_summary
+                }
+                res.send(responseGenerator.getResponse(200, "Tickets found.", ticket_details));
             }
         });
     }

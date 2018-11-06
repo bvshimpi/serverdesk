@@ -23,7 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApplicationGuard } from './application.guard';
 import { ActivateUserComponent } from './public/activate-user/activate-user.component';
-
+import { DxPieChartModule } from 'devextreme-angular';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +52,8 @@ import { ActivateUserComponent } from './public/activate-user/activate-user.comp
     DxTreeViewModule,
     ToastrModule.forRoot(),
     HttpModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    DxPieChartModule
   ],
   providers: [ApplicationGuard],
   bootstrap: [AppComponent]

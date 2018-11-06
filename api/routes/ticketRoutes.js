@@ -21,5 +21,6 @@ router.post("/getTicket", common.verifyRequest, ticket.getTicket);
 router.post("/deleteTicket", common.verifyRequest, ticket.deleteTicket);
 router.post("/updateTicketStatus", common.verifyRequest, ticket.updateTicketStatus);
 router.post("/getRTickets", common.verifyRequest, ticket.getRTickets);
+router.post("/getDashboardData", common.verifyRequest, ticket.getDashboardData);
 
 module.exports = router;

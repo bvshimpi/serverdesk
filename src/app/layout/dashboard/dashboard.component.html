@@ -1,3 +1,59 @@
-<p>
-  dashboard works!
-</p>
+<div class="row pageContainer">
+  <div class="col-md-12">
+    <div class="jumbotron pt-3">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card pink  text-center z-depth-2">
+            <div class="card-body">
+                <p class="white-text mb-0 pb-2">{{totalTickets}}</p>
+                <p class="white-text tborder mb-0 pt-2">Total Tickets</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card indigo text-center z-depth-2">
+            <div class="card-body">
+                <p class="white-text mb-0 pb-2">{{postedTickets}}</p>
+                <p class="white-text tborder mb-0 pt-2">Posted Tickets</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card success-color text-center z-depth-2">
+            <div class="card-body">
+                <p class="white-text mb-0 pb-2">{{reactedTickets}}</p>
+                <p class="white-text tborder mb-0 pt-2">Reacted Tickets</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 pt-5">
+          <dx-pie-chart id="pie" title="Ticket details by Status" palette="bright" [dataSource]="statusSummary">
+            <dxo-legend orientation="horizontal" itemTextPosition="right" horizontalAlignment="center" verticalAlignment="bottom" [columnCount]="4"></dxo-legend>
+            <dxo-export [enabled]="true"></dxo-export>
+              <dxi-series argumentField="status" valueField="count">
+                <dxo-label [visible]="true" position="columns" [customizeText]="customizeLabel">
+                    <dxo-font [size]="16"></dxo-font>
+                    <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+          </dx-pie-chart>
+        </div>
+        <div class="col-md-6 pt-5">
+          <dx-pie-chart id="pie" title="Ticket details by Priority" palette="bright" [dataSource]="prioritySummary">
+            <dxo-legend orientation="horizontal" itemTextPosition="right" horizontalAlignment="center" verticalAlignment="bottom" [columnCount]="4"></dxo-legend>
+            <dxo-export [enabled]="true"></dxo-export>
+              <dxi-series argumentField="priority" valueField="count">
+                <dxo-label [visible]="true" position="columns" [customizeText]="customizeLabel">
+                    <dxo-font [size]="16"></dxo-font>
+                    <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+          </dx-pie-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
