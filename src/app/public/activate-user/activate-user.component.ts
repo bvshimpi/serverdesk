@@ -44,4 +44,8 @@ export class ActivateUserComponent implements OnInit {
       this.spinner.hide();
     }
   }
+
+  resendEmail() {
+    
+  }
 }

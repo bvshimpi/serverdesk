@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./forgotpassword.component.scss']
 })
 export class ForgotpasswordComponent implements OnInit {
-
+  email:any;
   constructor() { }
 
   ngOnInit() {
