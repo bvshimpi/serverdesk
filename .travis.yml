@@ -17,6 +17,7 @@ cache:
         - node_modules
 
 script:
+  - ng test
   - ng build --prod --aot
 
 deploy:
