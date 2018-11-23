@@ -17,7 +17,6 @@ cache:
         - node_modules
 
 script:
-  - ng serve
   - ng build --prod --aot
 
 deploy:
