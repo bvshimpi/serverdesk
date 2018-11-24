@@ -23,7 +23,7 @@ deploy:
   provider: pages
   skip-cleanup: true
   keep-history: true
-  github-token: 68464ab3fcdf9acaac8b7bab6fcc17f747d05b2a
+  github-token: $GITHUB_TOKEN
   local-dir: ./dist/
   on:
     branch: master
