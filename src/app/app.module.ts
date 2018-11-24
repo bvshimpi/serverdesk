@@ -24,6 +24,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApplicationGuard } from './application.guard';
 import { ActivateUserComponent } from './public/activate-user/activate-user.component';
 import { DxPieChartModule } from 'devextreme-angular';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +57,7 @@ import { DxPieChartModule } from 'devextreme-angular';
     NgxSpinnerModule,
     DxPieChartModule
   ],
-  providers: [ApplicationGuard],
+  providers: [ApplicationGuard,{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
