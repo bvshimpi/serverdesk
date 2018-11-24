@@ -20,10 +20,11 @@ script:
   - ng build --prod --aot
 
 deploy:
-  provider: pages
+  provider: heroku
+  api-key:
+    secure: "694d9602-4335-4a60-b910-92584843c04b"
   skip-cleanup: true
   keep-history: true
   github-token: $GITHUB_TOKEN
-  local-dir: ./dist/
   on:
     branch: master
