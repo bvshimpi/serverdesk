@@ -1,2 +1,0 @@
-# CryptoriyalAPI
-Cryptoriyal API
