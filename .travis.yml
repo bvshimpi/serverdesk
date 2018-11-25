@@ -18,7 +18,6 @@ cache:
 
 script:
   - npm run build.prod
-  - ngh
 
 deploy:
   provider: pages
