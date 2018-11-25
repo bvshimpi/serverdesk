@@ -24,6 +24,6 @@ deploy:
   skip-cleanup: true
   keep-history: true
   github-token: $GITHUB_TOKEN
-  local_dir: dist
+  local_dir: serverdesk
   on:
     branch: master
