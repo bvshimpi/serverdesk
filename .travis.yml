@@ -17,15 +17,13 @@ cache:
         - node_modules
 
 script:
-  - ng build --prod --aot
+  - ng build --prod --aot --base-href=https://bvshimpi.github.io/serverdesk/
 
 deploy:
-  provider: heroku
-  api-key:
-    secure: "694d9602-4335-4a60-b910-92584843c04b"
-  app: serverdesk
+  provider: pages
   skip-cleanup: true
   keep-history: true
   github-token: $GITHUB_TOKEN
+  local_dir: dist/serverdesk
   on:
     branch: master
