@@ -17,7 +17,7 @@ cache:
         - node_modules
 
 script:
-  - ng build --prod --aot --base-href=https://bvshimpi.github.io/serverdesk/
+  - ng build --prod --aot --base-href https://bvshimpi.github.io/serverdesk/
 
 deploy:
   provider: pages
