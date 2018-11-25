@@ -17,13 +17,13 @@ cache:
         - node_modules
 
 script:
-  - ng build --prod --aot --base-href https://bvshimpi.github.io/serverdesk/
+  - npm run build.prod
 
 deploy:
   provider: pages
   skip-cleanup: true
   keep-history: true
   github-token: $GITHUB_TOKEN
-  local_dir: dist/serverdesk
+  local_dir: dist
   on:
     branch: master
