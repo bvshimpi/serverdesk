@@ -49,6 +49,7 @@ describe('MainService', () => {
     }
     service.setUserDetails(user);
     expect(service.getToken()).toEqual("testToken");
+    service.removeUserDetails();
   });
 
   it("Check Base url define", () => {
