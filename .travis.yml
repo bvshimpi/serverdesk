@@ -18,7 +18,6 @@ cache:
 
 script: 
 - npm run build.prod
-- npm run test --watch=false
 
 deploy:
   provider: pages
