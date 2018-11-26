@@ -17,7 +17,7 @@ cache:
         - node_modules
 
 script: 
-- npm run test -- --watch=false
+- npm run test --watch=false
 - npm run e2e
 
 after_success:
