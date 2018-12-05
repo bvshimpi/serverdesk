@@ -24,7 +24,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApplicationGuard } from './application.guard';
 import { ActivateUserComponent } from './public/activate-user/activate-user.component';
 import { DxPieChartModule } from 'devextreme-angular';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common'
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { UnitTestComponent } from './unit-test/unit-test.component'
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common'
     TicketsComponent,
     AddupdateticketComponent,
     RticketsComponent,
-    ActivateUserComponent
+    ActivateUserComponent,
+    UnitTestComponent
   ],
   imports: [
     BrowserModule,
