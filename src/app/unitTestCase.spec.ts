@@ -3,9 +3,8 @@ import { AppComponent } from './app.component';
 import {MainService} from './service/main.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA  } from '@angular/core';
-import {UnitTestComponent, User} from './unit-test/unit-test.component';
-import {Component, DebugElement} from "@angular/core";
-import {By} from "@angular/platform-browser";
+import {ReactiveFormsModule, FormsModule} from "@angular/forms";
+import {UnitTestComponent, User} from "./unit-test/unit-test.component";
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -59,59 +58,90 @@ describe('MainService', () => {
   });
 });
 
-describe('Component: Login', () => {
+describe('Component Form Testing: Login', () => {
 
   let component: UnitTestComponent;
   let fixture: ComponentFixture<UnitTestComponent>;
-  let submitEl: DebugElement;
-  let loginEl: DebugElement;
-  let passwordEl: DebugElement;
 
   beforeEach(() => {
 
     // refine the test module by declaring the test component
     TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, FormsModule],
       declarations: [UnitTestComponent]
     });
-
 
     // create component and test fixture
     fixture = TestBed.createComponent(UnitTestComponent);
 
     // get test component from the fixture
     component = fixture.componentInstance;
-
-    submitEl = fixture.debugElement.query(By.css('button'));
-    loginEl = fixture.debugElement.query(By.css('input[type=email]'));
-    passwordEl = fixture.debugElement.query(By.css('input[type=password]'));
+    component.ngOnInit();
   });
 
-  it('Setting enabled to false disabled the submit button', () => {
-    component.enabled = false;
-    fixture.detectChanges();
-    expect(submitEl.nativeElement.disabled).toBeTruthy();
+  it('form invalid when empty', () => {
+    expect(component.form.valid).toBeFalsy();
   });
 
-  it('Setting enabled to true enables the submit button', () => {
-    component.enabled = true;
-    fixture.detectChanges();
-    expect(submitEl.nativeElement.disabled).toBeFalsy();
+  it('email field validity', () => {
+    let errors = {};
+    let email = component.form.controls['email'];
+    expect(email.valid).toBeFalsy();
+
+    // Email field is required
+    errors = email.errors || {};
+    expect(errors['required']).toBeTruthy();
+
+    // Set email to something
+    email.setValue("test");
+    errors = email.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['pattern']).toBeTruthy();
+
+    // Set email to something correct
+    email.setValue("test@example.com");
+    errors = email.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['pattern']).toBeFalsy();
   });
 
-  it('Entering email and password emits loggedIn event', () => {
+  it('password field validity', () => {
+    let errors = {};
+    let password = component.form.controls['password'];
+
+    // Email field is required
+    errors = password.errors || {};
+    expect(errors['required']).toBeTruthy();
+
+    // Set email to something
+    password.setValue("123456");
+    errors = password.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['minlength']).toBeTruthy();
+
+    // Set email to something correct
+    password.setValue("123456789");
+    errors = password.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['minlength']).toBeFalsy();
+  });
+
+  it('submitting a form emits a user', () => {
+    expect(component.form.valid).toBeFalsy();
+    component.form.controls['email'].setValue("test@test.com");
+    component.form.controls['password'].setValue("123456789");
+    expect(component.form.valid).toBeTruthy();
+
     let user: User;
-    loginEl.nativeElement.value = "test@example.com";
-    passwordEl.nativeElement.value = "123456";
-
     // Subscribe to the Observable and store the user in a local variable.
     component.loggedIn.subscribe((value) => user = value);
 
-    // This sync emits the event and the subscribe callback gets executed above
-    submitEl.triggerEventHandler('click', null);
+    // Trigger the login function
+    component.login();
 
     // Now we can check to make sure the emitted value is correct
-    expect(user.email).toBe("test@example.com");
-    expect(user.password).toBe("123456");
+    expect(user.email).toBe("test@test.com");
+    expect(user.password).toBe("123456789");
   });
 })
 ;
