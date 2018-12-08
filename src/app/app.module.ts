@@ -3,7 +3,7 @@ import { HttpModule } from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -42,7 +42,8 @@ import { UnitTestComponent } from './unit-test/unit-test.component'
     AddupdateticketComponent,
     RticketsComponent,
     ActivateUserComponent,
-    UnitTestComponent
+    UnitTestComponent,
+    ReactiveFormsModule
   ],
   imports: [
     BrowserModule,

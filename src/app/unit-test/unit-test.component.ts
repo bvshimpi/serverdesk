@@ -1,6 +1,7 @@
 import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
+
 export class User {
   constructor(public email: string, public password: string) {
   }
