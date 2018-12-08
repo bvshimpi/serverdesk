@@ -42,8 +42,7 @@ import { UnitTestComponent } from './unit-test/unit-test.component'
     AddupdateticketComponent,
     RticketsComponent,
     ActivateUserComponent,
-    UnitTestComponent,
-    ReactiveFormsModule
+    UnitTestComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +57,8 @@ import { UnitTestComponent } from './unit-test/unit-test.component'
     ToastrModule.forRoot(),
     HttpModule,
     NgxSpinnerModule,
-    DxPieChartModule
+    DxPieChartModule,
+    ReactiveFormsModule
   ],
   providers: [ApplicationGuard,{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
