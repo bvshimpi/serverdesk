@@ -18,7 +18,6 @@ export class UnitTestComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb:FormBuilder) { 
-    
   }
 
   ngOnInit() {
